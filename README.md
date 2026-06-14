@@ -1,2 +1,1 @@
-# Task-Manager
-///
+Учебный проект: AI Task Manager (Junior Level).
