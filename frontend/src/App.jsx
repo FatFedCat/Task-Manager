@@ -63,7 +63,7 @@ function App() {
 
   return (
     <main className="container">
-      <h1>AI Task Manager</h1>
+      <h1>AI Менеджер задач</h1>
       {error && <p className="error-message">{error}</p>}
       <TaskForm onSubmit={handleCreateTask} loading={submitting} />
       <TaskTable

@@ -5,7 +5,7 @@ function validateTaskPayload(payload) {
   const description = typeof payload?.description === "string" ? payload.description.trim() : "";
 
   if (!title) {
-    return { isValid: false, message: "Field 'title' is required." };
+    return { isValid: false, message: "Поле 'title' обязательно для заполнения." };
   }
 
   return {
@@ -21,7 +21,7 @@ function validateTaskId(id) {
   const parsedId = Number(id);
 
   if (!Number.isInteger(parsedId) || parsedId <= 0) {
-    return { isValid: false, message: "Task id must be a positive integer." };
+    return { isValid: false, message: "ID задачи должен быть положительным целым числом." };
   }
 
   return { isValid: true, value: parsedId };
@@ -31,7 +31,7 @@ function validateStatus(status) {
   if (typeof status !== "string" || !ALLOWED_STATUSES.includes(status)) {
     return {
       isValid: false,
-      message: `Status must be one of: ${ALLOWED_STATUSES.join(", ")}.`,
+      message: `Статус должен быть одним из: ${ALLOWED_STATUSES.join(", ")}.`,
     };
   }
 

@@ -1,12 +1,17 @@
 const STATUS_OPTIONS = ["new", "in_progress", "done"];
+const STATUS_LABELS = {
+  new: "Новая",
+  in_progress: "В работе",
+  done: "Готово",
+};
 
 function TaskTable({ tasks, loading, onStatusChange, onDelete }) {
   if (loading) {
-    return <p>Loading tasks...</p>;
+    return <p>Загрузка задач...</p>;
   }
 
   if (!tasks.length) {
-    return <p>No tasks yet.</p>;
+    return <p>Пока нет задач.</p>;
   }
 
   return (
@@ -14,11 +19,11 @@ function TaskTable({ tasks, loading, onStatusChange, onDelete }) {
       <thead>
         <tr>
           <th>ID</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Created At</th>
-          <th>Actions</th>
+          <th>Название</th>
+          <th>Описание</th>
+          <th>Статус</th>
+          <th>Создано</th>
+          <th>Действия</th>
         </tr>
       </thead>
       <tbody>
@@ -34,15 +39,15 @@ function TaskTable({ tasks, loading, onStatusChange, onDelete }) {
               >
                 {STATUS_OPTIONS.map((statusOption) => (
                   <option key={statusOption} value={statusOption}>
-                    {statusOption}
+                    {STATUS_LABELS[statusOption]}
                   </option>
                 ))}
               </select>
             </td>
-            <td>{new Date(task.created_at).toLocaleString()}</td>
+            <td>{new Date(task.created_at).toLocaleString("ru-RU")}</td>
             <td>
               <button type="button" onClick={() => onDelete(task.id)}>
-                Delete
+                Удалить
               </button>
             </td>
           </tr>

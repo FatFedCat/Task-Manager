@@ -8,7 +8,7 @@ async function handleResponse(response) {
     return response.json();
   }
 
-  let message = "Request failed.";
+  let message = "Не удалось выполнить запрос.";
   try {
     const errorBody = await response.json();
     if (errorBody?.message) {
@@ -16,6 +16,11 @@ async function handleResponse(response) {
     }
   } catch (error) {
     // Ignore JSON parsing errors and return default message.
+  }
+
+  // Guard against mojibake in server error text.
+  if (message.includes("�")) {
+    message = "Ошибка подключения к серверу или базе данных.";
   }
 
   throw new Error(message);

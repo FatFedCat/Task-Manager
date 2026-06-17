@@ -57,7 +57,7 @@ async function updateTaskStatus(taskId, status) {
   const { rows } = await db.query(query, params);
 
   if (!rows.length) {
-    throw new ApiError(404, `Task with id ${taskIdValidation.value} not found.`);
+    throw new ApiError(404, `Задача с id ${taskIdValidation.value} не найдена.`);
   }
 
   return rows[0];
@@ -78,7 +78,7 @@ async function deleteTask(taskId) {
   const { rows } = await db.query(query, params);
 
   if (!rows.length) {
-    throw new ApiError(404, `Task with id ${taskIdValidation.value} not found.`);
+    throw new ApiError(404, `Задача с id ${taskIdValidation.value} не найдена.`);
   }
 }
 

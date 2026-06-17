@@ -22,29 +22,29 @@ function TaskForm({ onSubmit, loading }) {
 
   return (
     <form className="task-form" onSubmit={handleSubmit}>
-      <h2>Create Task</h2>
+      <h2>Создать задачу</h2>
       <label>
-        Title
+        Название
         <input
           value={title}
           onChange={(event) => setTitle(event.target.value)}
-          placeholder="Task title"
+          placeholder="Введите название задачи"
           disabled={loading}
           required
         />
       </label>
       <label>
-        Description
+        Описание
         <textarea
           value={description}
           onChange={(event) => setDescription(event.target.value)}
-          placeholder="Task description"
+          placeholder="Введите описание задачи"
           disabled={loading}
           rows={3}
         />
       </label>
       <button type="submit" disabled={loading}>
-        {loading ? "Creating..." : "Create Task"}
+        {loading ? "Создание..." : "Создать задачу"}
       </button>
     </form>
   );
