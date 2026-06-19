@@ -63,15 +63,22 @@ function App() {
 
   return (
     <main className="container">
-      <h1>AI Менеджер задач</h1>
+      <header className="page-header">
+        <h1>AI Менеджер задач</h1>
+        <p className="page-subtitle">Простой трекер задач на React + Node.js + PostgreSQL</p>
+      </header>
       {error && <p className="error-message">{error}</p>}
-      <TaskForm onSubmit={handleCreateTask} loading={submitting} />
-      <TaskTable
-        tasks={tasks}
-        loading={loading}
-        onStatusChange={handleStatusChange}
-        onDelete={handleDeleteTask}
-      />
+      <section className="card">
+        <TaskForm onSubmit={handleCreateTask} loading={submitting} />
+      </section>
+      <section className="card table-card">
+        <TaskTable
+          tasks={tasks}
+          loading={loading}
+          onStatusChange={handleStatusChange}
+          onDelete={handleDeleteTask}
+        />
+      </section>
     </main>
   );
 }

@@ -43,7 +43,7 @@ function TaskForm({ onSubmit, loading }) {
           rows={3}
         />
       </label>
-      <button type="submit" disabled={loading}>
+      <button className="primary-button" type="submit" disabled={loading}>
         {loading ? "Создание..." : "Создать задачу"}
       </button>
     </form>

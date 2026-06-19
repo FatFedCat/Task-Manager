@@ -7,11 +7,11 @@ const STATUS_LABELS = {
 
 function TaskTable({ tasks, loading, onStatusChange, onDelete }) {
   if (loading) {
-    return <p>Загрузка задач...</p>;
+    return <p className="table-state">Загрузка задач...</p>;
   }
 
   if (!tasks.length) {
-    return <p>Пока нет задач.</p>;
+    return <p className="table-state">Пока нет задач. Создайте первую задачу выше.</p>;
   }
 
   return (
@@ -34,6 +34,7 @@ function TaskTable({ tasks, loading, onStatusChange, onDelete }) {
             <td>{task.description || "-"}</td>
             <td>
               <select
+                className={`status-select status-${task.status}`}
                 value={task.status}
                 onChange={(event) => onStatusChange(task.id, event.target.value)}
               >
@@ -46,7 +47,7 @@ function TaskTable({ tasks, loading, onStatusChange, onDelete }) {
             </td>
             <td>{new Date(task.created_at).toLocaleString("ru-RU")}</td>
             <td>
-              <button type="button" onClick={() => onDelete(task.id)}>
+              <button className="danger-button" type="button" onClick={() => onDelete(task.id)}>
                 Удалить
               </button>
             </td>
