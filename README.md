@@ -23,6 +23,143 @@
 - `database/` - SQL-скрипт для таблицы
 - `python/` - скрипт экспорта задач
 
+## Описание файлов
+
+### Корень проекта
+
+| Файл | Назначение |
+|------|------------|
+| `docker-compose.yml` | Оркестрация всех сервисов (БД, backend, frontend, python-export) через Docker |
+| `.env.example` | Шаблон переменных окружения для Docker Compose (нужно скопировать в `.env`) |
+| `.gitignore` | Исключает из git: `.env`, `node_modules/`, `dist/`, `__pycache__`, CSV-файл |
+| `README.md` | Документация проекта |
+
+### `database/`
+
+| Файл | Назначение |
+|------|------------|
+| `init.sql` | SQL-скрипт создания таблицы `tasks` с полями `id`, `title`, `description`, `status`, `created_at` |
+
+### `backend/`
+
+| Файл | Назначение |
+|------|------------|
+| `Dockerfile` | Образ для сборки backend-контейнера на базе `node:lts-alpine` |
+| `package.json` | Зависимости Node.js: `express`, `pg`, `cors`, `dotenv` |
+| `src/server.js` | Точка входа — запускает HTTP-сервер на порту из конфига |
+| `src/app.js` | Настройка Express: подключение CORS, JSON-парсера, роутов и middleware ошибок |
+| `src/config/env.js` | Загрузка и валидация переменных окружения (`PORT`, `DATABASE_URL`, `CORS_ORIGIN`) |
+| `src/config/db.js` | Пул соединений с PostgreSQL через `pg.Pool` |
+| `src/routes/index.js` | Корневой роутер: `/health` и подключение `/tasks` |
+| `src/routes/taskRoutes.js` | Роуты задач: `POST /`, `GET /`, `PUT /:id`, `DELETE /:id` |
+| `src/controllers/taskController.js` | Обработчики HTTP-запросов — принимают `req/res`, вызывают сервис, передают ошибки в `next` |
+| `src/services/taskService.js` | Бизнес-логика: валидация входных данных, SQL-запросы к БД |
+| `src/validators/taskValidators.js` | Чистые функции валидации: `title`, `id`, `status` |
+| `src/utils/ApiError.js` | Кастомный класс ошибки с полем `statusCode` для различения HTTP-статусов |
+| `src/middlewares/errorHandler.js` | Централизованный обработчик ошибок: возвращает JSON с кодом и сообщением |
+| `src/middlewares/notFound.js` | Возвращает 404 для всех неизвестных маршрутов |
+
+### `frontend/`
+
+| Файл | Назначение |
+|------|------------|
+| `Dockerfile` | Двухэтапная сборка: `node:lts-alpine` собирает Vite-bundle, `nginx:alpine` раздаёт статику |
+| `nginx.conf` | Конфиг Nginx: `try_files` для SPA-роутинга |
+| `package.json` | Зависимости: `react`, `react-dom`, `vite` |
+| `index.html` | Корневой HTML-файл Vite |
+| `src/main.jsx` | Точка входа React — монтирует `<App />` в DOM |
+| `src/App.jsx` | Корневой компонент: управляет состоянием задач, обрабатывает все события |
+| `src/api/tasksApi.js` | API-слой: функции `fetchTasks`, `createTask`, `updateTaskStatus`, `deleteTask` |
+| `src/components/TaskForm.jsx` | Форма создания задачи с полями `title` и `description` |
+| `src/components/TaskTable.jsx` | Таблица задач: статус через `<select>`, кнопка удаления с подтверждением |
+| `src/styles.css` | Глобальные стили приложения |
+
+### `python/`
+
+| Файл | Назначение |
+|------|------------|
+| `Dockerfile` | Образ на базе `python:3.12-slim` для запуска скрипта экспорта |
+| `export_tasks.py` | Подключается к PostgreSQL, выгружает все задачи и сохраняет в CSV-файл |
+| `requirements.txt` | Зависимости Python с зафиксированными версиями: `psycopg`, `python-dotenv` |
+
+## Запуск через Docker (рекомендуется)
+
+Самый простой способ запустить весь проект одной командой.
+
+### Требования
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (включает Docker Compose)
+
+### Шаги
+
+**1) Создать файл `.env` в корне проекта:**
+
+```bash
+cp .env.example .env
+```
+
+PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Открыть `.env` и задать пароль для PostgreSQL:
+
+```
+POSTGRES_PASSWORD=придумайте_пароль
+```
+
+**2) Собрать образы и запустить все сервисы:**
+
+```bash
+docker compose up --build
+```
+
+После запуска:
+
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:5000`
+- Health check: `http://localhost:5000/health`
+
+**3) Проверить запущенные контейнеры:**
+
+```bash
+docker ps
+```
+
+Должны отображаться три контейнера: `db`, `backend`, `frontend`.
+
+**4) Посмотреть логи backend:**
+
+```bash
+docker compose logs backend
+```
+
+**5) Запустить Python-экспорт задач в CSV:**
+
+```bash
+docker compose run --rm python-export
+```
+
+CSV-файл появится в папке `output/tasks_export.csv` в корне проекта.
+
+**6) Остановить проект:**
+
+```bash
+docker compose down
+```
+
+Для полной очистки (включая данные БД):
+
+```bash
+docker compose down -v
+```
+
+---
+
+## Запуск без Docker (ручной способ)
+
 ## Что нужно установить
 
 - Node.js (лучше LTS версия)
