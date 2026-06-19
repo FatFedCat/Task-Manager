@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-import psycopg
+import psycopg2
 
 
 def load_config():
@@ -28,7 +28,7 @@ def fetch_tasks(database_url):
         ORDER BY created_at DESC, id DESC
     """
 
-    with psycopg.connect(database_url) as connection:
+    with psycopg2.connect(database_url) as connection:
         with connection.cursor() as cursor:
             cursor.execute(query)
             rows = cursor.fetchall()

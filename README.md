@@ -110,7 +110,15 @@ Copy-Item .env.example .env
 POSTGRES_PASSWORD=придумайте_пароль
 ```
 
-**2) Собрать образы и запустить все сервисы:**
+**2) Установить зависимости и собрать frontend локально:**
+
+```bash
+cd backend && npm install && cd ../frontend && npm install && npm run build && cd ..
+```
+
+> Зависимости устанавливаются локально и копируются в контейнер при сборке.
+
+**3) Собрать образы и запустить все сервисы:**
 
 ```bash
 docker compose up --build
@@ -122,7 +130,7 @@ docker compose up --build
 - Backend API: `http://localhost:5000`
 - Health check: `http://localhost:5000/health`
 
-**3) Проверить запущенные контейнеры:**
+**4) Проверить запущенные контейнеры:**
 
 ```bash
 docker ps
@@ -130,21 +138,23 @@ docker ps
 
 Должны отображаться три контейнера: `db`, `backend`, `frontend`.
 
-**4) Посмотреть логи backend:**
+**5) Посмотреть логи backend:**
 
 ```bash
 docker compose logs backend
 ```
 
-**5) Запустить Python-экспорт задач в CSV:**
+**6) Запустить Python-экспорт задач в CSV:**
 
 ```bash
-docker compose run --rm python-export
+cd python
+python -m pip install -r requirements.txt
+python export_tasks.py
 ```
 
-CSV-файл появится в папке `output/tasks_export.csv` в корне проекта.
+CSV-файл появится в папке `python/tasks_export.csv`.
 
-**6) Остановить проект:**
+**7) Остановить проект:**
 
 ```bash
 docker compose down

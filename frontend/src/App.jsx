@@ -71,7 +71,7 @@ function App() {
   return (
     <main className="container">
       <header className="page-header">
-        <h1>AI Менеджер задач</h1>
+        <h1>Менеджер задач</h1>
         <p className="page-subtitle">Простой трекер задач на React + Node.js + PostgreSQL</p>
       </header>
       {error && <p className="error-message">{error}</p>}
