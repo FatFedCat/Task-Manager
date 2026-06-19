@@ -1,1 +1,7 @@
 tasks_export.csv
+
+.env
+node_modules/
+dist/
+__pycache__/
+*.pyc

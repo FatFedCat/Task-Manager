@@ -7,6 +7,7 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [processingId, setProcessingId] = useState(null);
   const [error, setError] = useState("");
 
   async function loadTasks() {
@@ -42,22 +43,28 @@ function App() {
   async function handleStatusChange(taskId, status) {
     try {
       setError("");
+      setProcessingId(taskId);
       const updatedTask = await updateTaskStatus(taskId, status);
       setTasks((currentTasks) =>
         currentTasks.map((task) => (task.id === taskId ? updatedTask : task)),
       );
     } catch (requestError) {
       setError(requestError.message);
+    } finally {
+      setProcessingId(null);
     }
   }
 
   async function handleDeleteTask(taskId) {
     try {
       setError("");
+      setProcessingId(taskId);
       await deleteTask(taskId);
       setTasks((currentTasks) => currentTasks.filter((task) => task.id !== taskId));
     } catch (requestError) {
       setError(requestError.message);
+    } finally {
+      setProcessingId(null);
     }
   }
 
@@ -75,6 +82,7 @@ function App() {
         <TaskTable
           tasks={tasks}
           loading={loading}
+          processingId={processingId}
           onStatusChange={handleStatusChange}
           onDelete={handleDeleteTask}
         />
