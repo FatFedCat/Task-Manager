@@ -1,4 +1,4 @@
-# AI Task Manager (Junior)
+# Task Manager (Junior)
 
 Это моя практическая работа по Full-Stack.  
 Тут я сделал простой менеджер задач:
